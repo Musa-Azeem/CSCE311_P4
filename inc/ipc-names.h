@@ -8,7 +8,7 @@ Definitions:
 #ifndef IPC_NAMES_H
 #define IPC_NAMES_H
 
-#define SEM_NAME "/csce311_semaphore"
-#define SM_NAME "/csce311_shared_memory"
+#define SEM_NAME "/csce311_p4_semaphore"
+#define SM_NAME "/csce311_p4_shared_memory"
 
 #endif
