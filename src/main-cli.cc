@@ -11,8 +11,8 @@ This file contains the main method for text-client
 #include <iostream>
 
 int main(int argc, char **argv){
-    if(argc != 3){
-        std::cout << "usage: ./text-client file_path search_string" << std::endl;
+    if(argc != 2){
+        std::cout << "usage: ./text-client [file-path]" << std::endl;
         return 1;
     }
     TextClient client(SM_NAME, SEM_NAME, argv[1], argv[2]);
