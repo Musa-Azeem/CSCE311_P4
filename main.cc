@@ -4,13 +4,10 @@
 #define SERVER_EXE "./text-server"
 #define CLIENT_EXE "./text-client"
 
-using std::cout;
-using std::endl;
-
 namespace main_srv{
     int main(int argc, char **argv){
         if(argc != 1){
-            cout << "usage: ./text-server" << endl; 
+            std::cout << "usage: ./text-server" << std::endl; 
             exit(1);
         }
         // TODO server
@@ -20,7 +17,7 @@ namespace main_srv{
 namespace main_cli{
     int main(int argc, char **argv){
         if(argc != 2){
-            cout << "usage: ./text-client [file-path]" << endl; 
+            std::cout << "usage: ./text-client [file-path]" << std::endl; 
             exit(1);
         }
         // TODO client
