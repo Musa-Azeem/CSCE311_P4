@@ -14,7 +14,6 @@ class SharedFileManager{
         ::sockaddr_un sock_addr_;
         // std::string socket_path_;
         int sock_fd;
-        char buffer[SOCKET_BUFFER_SIZE];
         const std::string kSemName;
         int handle_error(std::string msg);
         sem_t *sem;

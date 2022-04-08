@@ -15,7 +15,7 @@ int TextServer::runServer(){
     int success;
     int client_sock_fd;
 
-    std::cout << "SERVER STARTED" << kSemName << std::endl;
+    std::cout << "SERVER STARTED" << std::endl;
     // Create semaphores
     sem_unlink(&kSemName[0]);
     sem = sem_open(&kSemName[0], 
@@ -50,8 +50,8 @@ int TextServer::runServer(){
         success = read(client_sock_fd, buffer, SOCKET_BUFFER_SIZE);
         if(success < 0)
             return handle_error("Reading from Client");
-        
-        std::string path(buffer);
-        std::cout << path << std::endl;
+        file_path = buffer;
+
+        // Share file to shared mem
     }
 }

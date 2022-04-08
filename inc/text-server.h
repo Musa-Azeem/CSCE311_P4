@@ -10,7 +10,8 @@ class TextServer: SharedFileManager{
                    const std::string sem_name);
         int runServer();
     private:
-        // const std::string kSemName;
+        char buffer[SOCKET_BUFFER_SIZE];
+        std::string file_path;
 };
 
 #endif

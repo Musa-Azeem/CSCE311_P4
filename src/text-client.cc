@@ -26,5 +26,12 @@ int TextClient::runClient(){
                       sizeof(sock_addr_));
     if(success < 0)
         return handle_error("Connecting to socket");
+
+    // Write filepath to Server
     success = write(sock_fd, &kFilePath[0], kFilePath.size()+1);
+    if(success < 0)
+        return handle_error("Writing to socket");
+    
+    // Wait for server to share file to memory
+    sem_wait(sem);
 }
