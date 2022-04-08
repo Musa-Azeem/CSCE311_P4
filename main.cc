@@ -25,8 +25,10 @@ namespace main_cli{
             exit(1);
         }
         TextClient cli(SOCK_NAME, SEM_NAME, argv[1]);
-        cli.runClient();
-        return 0;
+        if (cli.runClient() > 0)
+            return 0;
+        else
+            return 1;
     }
 }
 

@@ -6,6 +6,7 @@
 #include <semaphore.h>
 
 #define SOCKET_BUFFER_SIZE 1024
+#define INV "_INVALID_FILE_"
 
 class SharedFileManager{
     public:
@@ -13,6 +14,7 @@ class SharedFileManager{
     protected:
         ::sockaddr_un sock_addr_;
         // std::string socket_path_;
+        char buffer[SOCKET_BUFFER_SIZE];
         int sock_fd;
         const std::string kSemName;
         int handle_error(std::string msg);

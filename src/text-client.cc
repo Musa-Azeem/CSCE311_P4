@@ -12,6 +12,7 @@ TextClient::TextClient(const std::string sock_name,
 
 int TextClient::runClient(){
     int success;
+    std::string check_inv;
 
     // Open Semaphore
     sem = sem_open(&kSemName[0], 0);
@@ -37,6 +38,17 @@ int TextClient::runClient(){
     
     // Wait for server to share file to memory
     sem_wait(sem);
+
+    // Step 3: Check if sever was unable to open file
+    //  Read socket to check if invalid file
+    success = read(sock_fd, buffer, SOCKET_BUFFER_SIZE);
+    if(success < 0)
+        return handle_error("Reading from Server");
+    check_inv = buffer;
+    if(check_inv.find(INV) != std::string::npos){
+        std::cerr << "INVALID FILE" << std::endl;
+        return -1;
+    }
 
     // Step 2: Process file with threads
 }

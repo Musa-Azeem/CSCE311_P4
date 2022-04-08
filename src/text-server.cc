@@ -13,7 +13,8 @@ TextServer::TextServer(const std::string sock_name,
 
 int TextServer::runServer(){
     int success;
-    int client_sock_fd;
+    int cli_sock_fd;
+    int fd;
 
     // Step 1: Start Server
     std::cout << "SERVER STARTED" << std::endl;
@@ -48,15 +49,15 @@ int TextServer::runServer(){
         std::cout << "looped" << std::endl;
         // Step 2: Recieve path from client
         // Wait for client connections
-        client_sock_fd = accept(sock_fd, nullptr, nullptr);
-        if(client_sock_fd < 0)
+        cli_sock_fd = accept(sock_fd, nullptr, nullptr);
+        if(cli_sock_fd < 0)
             return handle_error("Accepting Client Connection");
         
         // Wait for client to write to socket
         sem_wait(sem);
 
         // Step 2.a: Read path from client
-        success = read(client_sock_fd, buffer, SOCKET_BUFFER_SIZE);
+        success = read(cli_sock_fd, buffer, SOCKET_BUFFER_SIZE);
         if(success < 0)
             return handle_error("Reading from Client");
         file_path = buffer;
@@ -65,5 +66,16 @@ int TextServer::runServer(){
 
         // Step 2.b: Open file and map to shared memory
         std::cout << "\tOpening: " << file_path << std::endl;
+        fd = open(&file_path[0], O_RDWR);
+        if(fd < 0){
+            // Indicate to client that file open failed
+            success = write(cli_sock_fd, INV, sizeof(INV));
+            if(success < 0)
+                return handle_error("Writng to Client");
+            sem_post(sem);
+            continue;
+        }
+        std::cout << "not inv" << std::endl;
+        sem_post(sem);
     }
 }
