@@ -19,6 +19,7 @@ int TextServer::runServer(){
     if(sem == SEM_FAILED){
         return handle_error("Creating Semaphore");
     }
+    // Create and Open Unix Domain Socket to get path
 
     // wait for client
     sem_wait(sem);

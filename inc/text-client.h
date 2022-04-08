@@ -5,12 +5,12 @@
 
 class TextClient{
     public:
-        TextClient(std::string sem_name, std::string file_path);
+        TextClient(std::string shm_name, std::string sem_name, std::string file_path);
         int runClient();
     private:
-        const std::string kFilePath;
         const std::string kSemName;
-
+        const std::string kShmName;
+        const std::string kFilePath;
 };
 
 #endif
