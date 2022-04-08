@@ -2,12 +2,19 @@
 #define SHARED_FILE_MANAGER_H
 
 #include <string>
+#include <sys/un.h>
+
+#define SOCKET_BUFFER_SIZE 1024
 
 class SharedFileManager{
     public:
-        SharedFileManager(std::string sem_name): sem_name(sem_name);
+        SharedFileManager(const std::string sock_name, const std::string sem_name);
     protected:
-        const std::string sem_name;
-}
+        ::sockaddr_un sock_addr_;
+        std::string socket_path_;
+        int sock_fd;
+        char buffer[SOCKET_BUFFER_SIZE];
+        const std::string kSemName;
+};
 
 #endif

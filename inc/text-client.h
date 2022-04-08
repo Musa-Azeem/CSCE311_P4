@@ -1,15 +1,14 @@
 #ifndef TEXT_CLIENT_H
 #define TEXT_CLIENT_H
 
+#include "../inc/shared-file-manager.h"
 #include <string>
 
-class TextClient{
+class TextClient: SharedFileManager{
     public:
-        TextClient(std::string shm_name, std::string sem_name, std::string file_path);
+        TextClient(const std::string sock_name, std::string sem_name, std::string file_path);
         int runClient();
     private:
-        const std::string kSemName;
-        const std::string kShmName;
         const std::string kFilePath;
 };
 

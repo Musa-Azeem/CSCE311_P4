@@ -3,10 +3,11 @@
 #include <semaphore.h>
 
 
-TextClient::TextClient(std::string shm_name, std::string sem_name, std::string file_path)
-    : kSemName(sem_name), kFilePath(file_path)
-    {}
+TextClient::TextClient(const std::string sock_name,
+                       const std::string sem_name, 
+                       const std::string file_path)
+    : SharedFileManager(sock_name, sem_name), kFilePath(file_path) {}
 
 int TextClient::runClient(){
-
+    
 }
