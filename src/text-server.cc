@@ -15,7 +15,7 @@ int TextServer::runServer(){
     int success;
     int client_sock_fd;
 
-    std::cout << "SERVER STARTED" << std::endl;
+    std::cout << "SERVER STARTED" << kSemName << std::endl;
     // Create semaphores
     sem_unlink(&kSemName[0]);
     sem = sem_open(&kSemName[0], 

@@ -10,7 +10,7 @@ class TextServer: SharedFileManager{
                    const std::string sem_name);
         int runServer();
     private:
-        const std::string kSemName;
+        // const std::string kSemName;
 };
 
 #endif

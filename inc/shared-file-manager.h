@@ -12,7 +12,7 @@ class SharedFileManager{
         SharedFileManager(const std::string sock_name, const std::string sem_name);
     protected:
         ::sockaddr_un sock_addr_;
-        std::string socket_path_;
+        // std::string socket_path_;
         int sock_fd;
         char buffer[SOCKET_BUFFER_SIZE];
         const std::string kSemName;

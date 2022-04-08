@@ -9,7 +9,7 @@
 SharedFileManager::SharedFileManager(const std::string sock_name, 
                                      const std::string sem_name)
     : kSemName(sem_name) {
-    socket_path_ = std::string(sock_name);
+    // socket_path_ = std::string(sock_name);
     sock_addr_ = {};
     sock_addr_.sun_family = AF_UNIX;
     strncpy(sock_addr_.sun_path + 1, 

@@ -15,7 +15,7 @@ flags := -std=c++17
 linker_libs = -L/lib -lpthread -lrt
 
 # compile command
-compile.cc = $(cc) $(flags) $^ -o $@ #$(linker_libs)
+compile.cc = $(cc) $(flags) $^ -o $@ $(linker_libs)
 
 # make
 $(cli_exe): $(src)
