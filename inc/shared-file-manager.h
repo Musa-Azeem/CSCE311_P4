@@ -15,6 +15,7 @@ class SharedFileManager{
         int sock_fd;
         char buffer[SOCKET_BUFFER_SIZE];
         const std::string kSemName;
+        int handle_error(std::string msg);
 };
 
 #endif

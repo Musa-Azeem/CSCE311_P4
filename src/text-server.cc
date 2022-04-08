@@ -5,9 +5,9 @@
 #include <iostream>
 #include <cerrno>
 
-TextServer::TextServer(std::string sem_name)
-    : kSemName(sem_name) 
-    {}
+TextServer::TextServer(const std::string sock_name, 
+                       const std::string sem_name)
+    : SharedFileManager(sock_name, sem_name) {}
 
 int TextServer::runServer(){
     // Create semaphores
@@ -21,12 +21,5 @@ int TextServer::runServer(){
     }
     // Create and Open Unix Domain Socket to get path
 
-    // wait for client
-    sem_wait(sem);
-}
-
-int TextServer::handle_error(std::string msg){
-    std::cerr << "Source:" << msg << std::endl;
-    std::cerr << "\t" << ::strerror(errno) << std::endl;
-    return(errno);
+    //set up sock
 }

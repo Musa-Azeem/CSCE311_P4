@@ -6,7 +6,9 @@
 
 class TextClient: SharedFileManager{
     public:
-        TextClient(const std::string sock_name, std::string sem_name, std::string file_path);
+        TextClient(const std::string sock_name, 
+                   const std::string sem_name, 
+                   const std::string file_path);
         int runClient();
     private:
         const std::string kFilePath;

@@ -9,6 +9,6 @@ Definitions:
 #define IPC_NAMES_H
 
 #define SEM_NAME "/csce311_p4_semaphore"
-#define SM_NAME "/csce311_p4_shared_memory"
+#define SOCK_NAME "/csce311_p4_socket"
 
 #endif

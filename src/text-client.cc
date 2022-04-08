@@ -9,5 +9,5 @@ TextClient::TextClient(const std::string sock_name,
     : SharedFileManager(sock_name, sem_name), kFilePath(file_path) {}
 
 int TextClient::runClient(){
-    
+    // set up sem and sock
 }
