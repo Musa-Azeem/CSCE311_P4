@@ -22,8 +22,8 @@ int TextServer::runServer(){
                    O_CREAT | O_EXCL, 
                    S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP, 
                    0);
-    // if(sem == SEM_FAILED)
-        // return handle_error("Creating Semaphore");
+    if(sem == SEM_FAILED)
+        return handle_error("Creating Semaphore");
     // Create and Open Unix Domain Socket to get path
     sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
     if(sock_fd < 0)

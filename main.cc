@@ -24,7 +24,7 @@ namespace main_cli{
             std::cout << "usage: ./text-client [file-path]" << std::endl; 
             exit(1);
         }
-        TextClient cli(SOCK_NAME, SEM_NAME, "hello");
+        TextClient cli(SOCK_NAME, SEM_NAME, argv[1]);
         cli.runClient();
         return 0;
     }
