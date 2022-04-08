@@ -15,8 +15,10 @@ int TextServer::runServer(){
     int success;
     int client_sock_fd;
 
+    // Step 1: Start Server
     std::cout << "SERVER STARTED" << std::endl;
-    // Create semaphores
+
+    // Create semaphore
     sem_unlink(&kSemName[0]);
     sem = sem_open(&kSemName[0], 
                    O_CREAT | O_EXCL, 
@@ -24,6 +26,7 @@ int TextServer::runServer(){
                    0);
     if(sem == SEM_FAILED)
         return handle_error("Creating Semaphore");
+
     // Create and Open Unix Domain Socket to get path
     sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
     if(sock_fd < 0)
@@ -42,16 +45,25 @@ int TextServer::runServer(){
 
     // Loop waiting for clients
     while(true){
+        std::cout << "looped" << std::endl;
+        // Step 2: Recieve path from client
         // Wait for client connections
         client_sock_fd = accept(sock_fd, nullptr, nullptr);
         if(client_sock_fd < 0)
             return handle_error("Accepting Client Connection");
         
+        // Wait for client to write to socket
+        sem_wait(sem);
+
+        // Step 2.a: Read path from client
         success = read(client_sock_fd, buffer, SOCKET_BUFFER_SIZE);
         if(success < 0)
             return handle_error("Reading from Client");
         file_path = buffer;
 
-        // Share file to shared mem
+        std::cout << "CLIENT REQUEST RECEIVED" << std::endl;
+
+        // Step 2.b: Open file and map to shared memory
+        std::cout << "\tOpening: " << file_path << std::endl;
     }
 }
