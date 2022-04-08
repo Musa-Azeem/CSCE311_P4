@@ -19,6 +19,6 @@ SharedFileManager::SharedFileManager(const std::string sock_name,
 
 int SharedFileManager::handle_error(std::string msg){
     std::cerr << "Source:" << msg << std::endl;
-    std::cerr << "\t" << ::strerror(errno) << std::endl;
-    return(errno);
+    std::cerr << "\t" << strerror(errno) << std::endl;
+    exit(errno);
 }

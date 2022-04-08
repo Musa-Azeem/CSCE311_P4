@@ -1,5 +1,8 @@
 #include <iostream>
 #include <string.h>
+#include "inc/text-client.h"
+#include "inc/text-server.h"
+#include "inc/ipc-names.h"
 
 #define SERVER_EXE "./text-server"
 #define CLIENT_EXE "./text-client"
@@ -10,7 +13,8 @@ namespace main_srv{
             std::cout << "usage: ./text-server" << std::endl; 
             exit(1);
         }
-        // TODO server
+        TextServer srv(SOCK_NAME, SEM_NAME);
+        srv.runServer();
         return 0;
     }
 }
@@ -20,7 +24,8 @@ namespace main_cli{
             std::cout << "usage: ./text-client [file-path]" << std::endl; 
             exit(1);
         }
-        // TODO client
+        TextClient cli(SOCK_NAME, SEM_NAME, "hello");
+        cli.runClient();
         return 0;
     }
 }

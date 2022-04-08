@@ -11,7 +11,6 @@ class TextServer: SharedFileManager{
         int runServer();
     private:
         const std::string kSemName;
-        sem_t *sem;
 };
 
 #endif

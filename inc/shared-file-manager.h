@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sys/un.h>
+#include <semaphore.h>
 
 #define SOCKET_BUFFER_SIZE 1024
 
@@ -16,6 +17,7 @@ class SharedFileManager{
         char buffer[SOCKET_BUFFER_SIZE];
         const std::string kSemName;
         int handle_error(std::string msg);
+        sem_t *sem;
 };
 
 #endif
