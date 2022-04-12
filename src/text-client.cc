@@ -19,12 +19,16 @@ int TextClient::runClient(){
     int fd;
     std::string check_inv;
     struct stat file_stats;
+    off_t file_size;
+    char *file_addr;
 
     // Open Semaphore
     cli_barrier = sem_open(&kCliBarrierName[0], 0);
     if(cli_barrier == SEM_FAILED)
         return handle_error("Opening semaphore");
-    
+    srv_barrier = sem_open(&kSrvBarrierName[0], 0);
+    if(srv_barrier == SEM_FAILED)
+        return handle_error("Opening Server semaphore");
     // Open Socket
     sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
     if(sock_fd < 0)
@@ -51,11 +55,16 @@ int TextClient::runClient(){
 
     // Wait for server to share file to memory
     sem_wait(cli_barrier);
+
     // Step 2: Process file with threads
     // Open file
+
     // fd = open(&kFilePath[0], O_RDWR);
-    // if (fd < 0)
-        // return handle_error("Opening file");
+    std::tie(fd, file_size, file_addr) = open_and_map_file(kFilePath);
+        if(fd < 0){
+            handle_error("Opening File");
+        }
+
     // Step 4: Return 1 to prompt main to return 0
     return 1;
 }

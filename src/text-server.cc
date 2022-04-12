@@ -30,7 +30,10 @@ int TextServer::runServer(){
     // Create semaphore
     cli_barrier = setup_named_sem(kCliBarrierName, O_CREAT | O_EXCL);
     if(cli_barrier == SEM_FAILED)
-        handle_error("Creating Semaphore");
+        handle_error("Creating Client Semaphore");
+    srv_barrier = setup_named_sem(kSrvBarrierName, O_CREAT | O_EXCL);
+    if(srv_barrier == SEM_FAILED)
+        handle_error("Creating Server Semaphore");
 
     // Create and Open Unix Domain Socket to get path
     sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -78,7 +81,7 @@ int TextServer::runServer(){
             handle_error("Writing to Client");
 
         // Wait for client to finish processing before closing and unmapping
-        
+
         // Unmap
 
         // Close file
