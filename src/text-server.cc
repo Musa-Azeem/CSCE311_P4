@@ -62,56 +62,24 @@ int TextServer::runServer(){
 
         std::clog << "CLIENT REQUEST RECEIVED" << std::endl;
 
-        // // Step 2.b: Open file and map to shared memory
-        // std::clog << "\tOpening: " << file_path << std::endl;
-        // std::tie(fd, file_size, file_addr) = open_and_map_file(file_path);
-        // if(fd < 0){
-        //     // Indicate to client that file open failed
-        //     if( write(cli_sock_fd, INV, sizeof(INV)) < 0 )
-        //         handle_error("Writing INV to Client");
-        //     continue;
-        // }
-        // std::clog << "\tFILE MAPPED TO SHARED MEMORY" << std::endl;
-        // // Indicate to client that file open succeeded
-        // if( write(cli_sock_fd, "\004", sizeof(char)) < 0 )
-        //     handle_error("Writing to Client");
-
-        // for (int i; i<file_size; i++){
-        //     cout << file_addr[i];
-        // }
         // Step 2.b: Open file and map to shared memory
         std::clog << "\tOpening: " << file_path << std::endl;
-        fd = open(&file_path[0], O_RDWR);
+        std::tie(fd, file_size, file_addr) = open_and_map_file(file_path);
         if(fd < 0){
             // Indicate to client that file open failed
             if( write(cli_sock_fd, INV, sizeof(INV)) < 0 )
                 handle_error("Writing INV to Client");
             continue;
         }
+        std::clog << "\tFILE MAPPED TO SHARED MEMORY" << std::endl;
+
         // Indicate to client that file open succeeded
         if( write(cli_sock_fd, "\004", sizeof(char)) < 0 )
             handle_error("Writing to Client");
 
-        // Get size of file
-        struct stat file_stats;
-        if( fstat(fd, &file_stats) < 0 )
-            handle_error("Getting file size");
-
-        // Map file to shared memory
-        file_addr = static_cast<char *>(
-            mmap(nullptr, 
-                 file_stats.st_size, 
-                 PROT_READ | PROT_WRITE,
-                 MAP_SHARED,
-                 fd,
-                 0));
-        if(file_addr == MAP_FAILED)
-            handle_error("Mapping file to Shared Memory");
-        std::clog << "\tFILE MAPPED TO SHARED MEMORY" << std::endl;
-
-        for (int i; i<file_stats.st_size; i++){
-            cout << file_addr[i];
-        }
+        // Wait for client to finish processing before closing and unmapping
+        
+        // Unmap
 
         // Close file
         if (close(fd) < 0)

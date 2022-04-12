@@ -53,9 +53,9 @@ int TextClient::runClient(){
     sem_wait(cli_barrier);
     // Step 2: Process file with threads
     // Open file
-    fd = open(&kFilePath[0], O_RDWR);
-    if (fd < 0)
-        return handle_error("Opening file");
+    // fd = open(&kFilePath[0], O_RDWR);
+    // if (fd < 0)
+        // return handle_error("Opening file");
     // Step 4: Return 1 to prompt main to return 0
     return 1;
 }
