@@ -4,6 +4,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <fcntl.h>
 
 using std::cout;
 using std::endl;
@@ -15,7 +16,9 @@ TextClient::TextClient(const std::string sock_name,
 
 int TextClient::runClient(){
     int success;
+    int fd;
     std::string check_inv;
+    struct stat file_stats;
 
     // Open Semaphore
     cli_barrier = sem_open(&kCliBarrierName[0], 0);
@@ -49,7 +52,10 @@ int TextClient::runClient(){
     // Wait for server to share file to memory
     sem_wait(cli_barrier);
     // Step 2: Process file with threads
-    
+    // Open file
+    fd = open(&kFilePath[0], O_RDWR);
+    if (fd < 0)
+        return handle_error("Opening file");
     // Step 4: Return 1 to prompt main to return 0
     return 1;
 }

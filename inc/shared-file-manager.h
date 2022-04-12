@@ -4,6 +4,7 @@
 #include <string>
 #include <sys/un.h>
 #include <semaphore.h>
+#include <tuple>
 
 #define SOCKET_BUFFER_SIZE 1024
 #define INV "_INVALID_FILE_"
@@ -21,7 +22,8 @@ class SharedFileManager{
         sem_t *srv_barrier;
         sem_t *cli_barrier;
         int handle_error(std::string msg);
-        sem_t *setup_named_sem(const std::string sem_name, int flags);
+        sem_t *setup_named_sem(const std::string sem_name, const int flags);
+        std::tuple<int, off_t, char*> open_and_map_file(const std::string file_path);
 };
 
 #endif
