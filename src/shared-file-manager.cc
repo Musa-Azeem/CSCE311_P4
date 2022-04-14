@@ -37,32 +37,31 @@ sem_t *SharedFileManager::setup_named_sem(const std::string sem_name,
                     0);
 }
 
-std::tuple<int, off_t, char*> SharedFileManager::open_and_map_file(
+int SharedFileManager::open_and_map_file(
         const std::string file_path){
-    int fd;
     struct stat f_stats;
-    char *file_addr;
 
     // Open File
     fd = open(&file_path[0], O_RDWR);
     if(fd < 0){
-        return {fd, 0, nullptr};
+        return -1;
     }
 
     // Get file size
     if( fstat(fd, &f_stats) < 0 )
         handle_error("Getting file size");
+    file_size = f_stats.st_size;
 
     // Map file to shared memory
     file_addr = static_cast<char *>(
         mmap(nullptr, 
-             f_stats.st_size, 
+             file_size, 
              PROT_READ | PROT_WRITE,
              MAP_SHARED,
              fd,
              0));
     if(file_addr == MAP_FAILED)
         handle_error("Mapping file to Shared Memory");
-    return {fd, f_stats.st_size, file_addr};
+    return 1;
 }
 

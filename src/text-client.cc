@@ -1,13 +1,16 @@
 #include "../inc/text-client.h"
+#include "../inc/thread-args.h"
 #include <string>
 #include <semaphore.h>
 #include <iostream>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <sys/mman.h>
 #include <fcntl.h>
-
-using std::cout;
-using std::endl;
+#include <pthread.h>
+#include <vector>
+#include <stdio.h>
+#include <ctype.h>
 
 TextClient::TextClient(const std::string sock_name,
                        const std::string sem_name, 
@@ -16,11 +19,11 @@ TextClient::TextClient(const std::string sock_name,
 
 int TextClient::runClient(){
     int success;
-    int fd;
+    // int fd;
     std::string check_inv;
-    struct stat file_stats;
-    off_t file_size;
-    char *file_addr;
+    // struct stat file_stats;
+    // off_t file_size;
+    // char *file_addr;
 
     // Open Semaphore
     cli_barrier = sem_open(&kCliBarrierName[0], 0);
@@ -40,11 +43,12 @@ int TextClient::runClient(){
         return handle_error("Connecting to socket");
 
     // Step 1: Pass filename to server using the socket
+    // Unblock server by writing
     if( write(sock_fd, &kFilePath[0], kFilePath.size()+1) < 0)
         return handle_error("Writing to socket");
     
     // Step 3: Check if sever was unable to open file
-    // Read socket to check if invalid file
+    // Wait for server to write to socket and read to check if file invalid
     if( read(sock_fd, buffer, SOCKET_BUFFER_SIZE) < 0)
         return handle_error("Reading from Server");
     check_inv = buffer;
@@ -54,17 +58,70 @@ int TextClient::runClient(){
     }
 
     // Wait for server to share file to memory
-    sem_wait(cli_barrier);
+    // sem_wait(cli_barrier);
 
     // Step 2: Process file with threads
     // Open file
+    if( open_and_map_file(kFilePath) < 0)
+        handle_error("Opening File");
 
-    // fd = open(&kFilePath[0], O_RDWR);
-    std::tie(fd, file_size, file_addr) = open_and_map_file(kFilePath);
-        if(fd < 0){
-            handle_error("Opening File");
-        }
+    // create and run threads
+    if (file_to_upper() < 0){
+        handle_error("Running threads");
+    }
+
+    // Unmap
+    if (munmap(file_addr, file_size) < 0)
+        handle_error("Unmapping File");
+    // Close file
+    if (close(fd) < 0)
+        handle_error("Closing File");
+
+    // Unblock Server
+    sem_post(srv_barrier);
 
     // Step 4: Return 1 to prompt main to return 0
     return 1;
+}
+
+int TextClient::file_to_upper(){
+    sem_destroy(&thread_sem);
+    sem_init(&thread_sem, 0, 1);
+
+
+    std::vector<pthread_t> threads(N_THREADS);
+    std::vector<ThreadArgs> args(N_THREADS);
+    off_t start_idx;
+    off_t stop_idx;
+    for(int i=0; i<threads.size(); i++){
+        start_idx = i * (file_size/N_THREADS);
+        stop_idx = start_idx + file_size/N_THREADS;
+        if(i==N_THREADS-1)
+            // if last thread, go until end of file to get last few lines
+            stop_idx = file_size;
+        args[i] = {this, start_idx, stop_idx};
+        int success = pthread_create(&threads[i], 
+                                     nullptr, 
+                                     threaded_to_upper, 
+                                     static_cast<void *>(&args[i]));
+        if(success < 0){
+            handle_error("Creating Thread "+i);
+        }
+    }
+    for(auto thread : threads){
+        if (pthread_join(thread, nullptr) < 0)
+            handle_error("Thread joining");
+    }
+    return 1;
+
+}
+
+void *TextClient::threaded_to_upper(void *thread_args){
+    ThreadArgs args = *static_cast<ThreadArgs*>(thread_args);
+    for(int i=args.start_idx; i<args.stop_idx; i++){
+        // Use toupper to convert each character in file to uppercase
+        args.cli->file_addr[i] = toupper(args.cli->file_addr[i]);
+
+    }
+    return nullptr;
 }

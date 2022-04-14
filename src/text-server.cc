@@ -19,10 +19,10 @@ TextServer::TextServer(const std::string sock_name,
 int TextServer::runServer(){
     int success;
     int cli_sock_fd;
-    int fd;
-    off_t file_size;
+    // int fd;
+    // off_t file_size;
     // struct stat file_stats;
-    char *file_addr;
+    // char *file_addr;
 
     // Step 1: Start Server
     std::cout << "SERVER STARTED" << std::endl;
@@ -59,6 +59,7 @@ int TextServer::runServer(){
             handle_error("Accepting Client Connection");
         
         // Step 2.a: Read path from client
+        // Wait for client to write
         if( read(cli_sock_fd, buffer, SOCKET_BUFFER_SIZE) < 0)
             handle_error("Reading from Client");
         file_path = buffer;
@@ -67,30 +68,34 @@ int TextServer::runServer(){
 
         // Step 2.b: Open file and map to shared memory
         std::clog << "\tOpening: " << file_path << std::endl;
-        std::tie(fd, file_size, file_addr) = open_and_map_file(file_path);
-        if(fd < 0){
-            // Indicate to client that file open failed
+
+        if( open_and_map_file(file_path) < 0){
+            // Indicate to client that file open failed (unblock)
             if( write(cli_sock_fd, INV, sizeof(INV)) < 0 )
                 handle_error("Writing INV to Client");
             continue;
         }
         std::clog << "\tFILE MAPPED TO SHARED MEMORY" << std::endl;
 
-        // Indicate to client that file open succeeded
+        // Unblock client by writing to socket if file open succeeded
         if( write(cli_sock_fd, "\004", sizeof(char)) < 0 )
             handle_error("Writing to Client");
 
         // Wait for client to finish processing before closing and unmapping
+        // for(int i(0); i<file_size; i++){
+        //     std::cout << file_addr[i];
+        // }
+
+        sem_wait(srv_barrier);
 
         // Unmap
+        if (munmap(file_addr, file_size) < 0)
+            handle_error("Unmapping File");
 
         // Close file
         if (close(fd) < 0)
             handle_error("Closing File");
         std::clog << "\tFILE CLOSED" << std::endl;
-
-        // Unblock Client
-        sem_post(cli_barrier);
 
     }   // Step 3: Loop again waiting for clients
 }

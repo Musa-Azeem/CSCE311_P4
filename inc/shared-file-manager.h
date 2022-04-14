@@ -21,9 +21,12 @@ class SharedFileManager{
         const std::string kCliBarrierName;
         sem_t *srv_barrier;
         sem_t *cli_barrier;
+        char *file_addr;
+        int fd;
+        off_t file_size;
         int handle_error(std::string msg);
         sem_t *setup_named_sem(const std::string sem_name, const int flags);
-        std::tuple<int, off_t, char*> open_and_map_file(const std::string file_path);
+        int open_and_map_file(const std::string file_path);
 };
 
 #endif

@@ -4,6 +4,8 @@
 #include "../inc/shared-file-manager.h"
 #include <string>
 
+#define N_THREADS 4
+
 class TextClient: SharedFileManager{
     public:
         TextClient(const std::string sock_name, 
@@ -12,6 +14,10 @@ class TextClient: SharedFileManager{
         int runClient();
     private:
         const std::string kFilePath;
+        static void *threaded_to_upper(void *thread_args);
+        int file_to_upper();
+
+        sem_t thread_sem;
 };
 
 #endif
