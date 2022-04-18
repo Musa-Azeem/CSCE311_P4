@@ -19,11 +19,7 @@ TextClient::TextClient(const std::string sock_name,
 
 int TextClient::runClient(){
     int success;
-    // int fd;
     std::string check_inv;
-    // struct stat file_stats;
-    // off_t file_size;
-    // char *file_addr;
 
     // Open Semaphore
     cli_barrier = sem_open(&kCliBarrierName[0], 0);
@@ -44,21 +40,18 @@ int TextClient::runClient(){
 
     // Step 1: Pass filename to server using the socket
     // Unblock server by writing
-    if( write(sock_fd, &kFilePath[0], kFilePath.size()+1) < 0)
+    if( write(sock_fd, &kFilePath[0], kFilePath.size()+1) < 0 )
         return handle_error("Writing to socket");
     
     // Step 3: Check if sever was unable to open file
     // Wait for server to write to socket and read to check if file invalid
-    if( read(sock_fd, buffer, SOCKET_BUFFER_SIZE) < 0)
+    if( read(sock_fd, buffer, SOCKET_BUFFER_SIZE) < 0 )
         return handle_error("Reading from Server");
     check_inv = buffer;
     if(check_inv.find(INV) != std::string::npos){
         std::cerr << "INVALID FILE" << std::endl;
         return -1;
     }
-
-    // Wait for server to share file to memory
-    // sem_wait(cli_barrier);
 
     // Step 2: Process file with threads
     // Open file
@@ -87,7 +80,6 @@ int TextClient::runClient(){
 int TextClient::file_to_upper(){
     sem_destroy(&thread_sem);
     sem_init(&thread_sem, 0, 1);
-
 
     std::vector<pthread_t> threads(N_THREADS);
     std::vector<ThreadArgs> args(N_THREADS);
@@ -118,10 +110,8 @@ int TextClient::file_to_upper(){
 
 void *TextClient::threaded_to_upper(void *thread_args){
     ThreadArgs args = *static_cast<ThreadArgs*>(thread_args);
-    for(int i=args.start_idx; i<args.stop_idx; i++){
+    for(int i=args.start_idx; i<args.stop_idx; i++)
         // Use toupper to convert each character in file to uppercase
         args.cli->file_addr[i] = toupper(args.cli->file_addr[i]);
-
-    }
     return nullptr;
 }

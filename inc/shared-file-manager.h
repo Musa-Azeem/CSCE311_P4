@@ -14,7 +14,6 @@ class SharedFileManager{
         SharedFileManager(const std::string sock_name, const std::string sem_name);
     protected:
         ::sockaddr_un sock_addr_;
-        // std::string socket_path_;
         char buffer[SOCKET_BUFFER_SIZE];
         int sock_fd;
         const std::string kSrvBarrierName;

@@ -19,10 +19,6 @@ TextServer::TextServer(const std::string sock_name,
 int TextServer::runServer(){
     int success;
     int cli_sock_fd;
-    // int fd;
-    // off_t file_size;
-    // struct stat file_stats;
-    // char *file_addr;
 
     // Step 1: Start Server
     std::cout << "SERVER STARTED" << std::endl;
@@ -82,10 +78,6 @@ int TextServer::runServer(){
             handle_error("Writing to Client");
 
         // Wait for client to finish processing before closing and unmapping
-        // for(int i(0); i<file_size; i++){
-        //     std::cout << file_addr[i];
-        // }
-
         sem_wait(srv_barrier);
 
         // Unmap
