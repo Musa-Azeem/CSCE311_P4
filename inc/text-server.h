@@ -3,6 +3,7 @@
 
 #include "../inc/shared-file-manager.h"
 #include <string>
+#include <semaphore.h>
 
 class TextServer: SharedFileManager{
     public:

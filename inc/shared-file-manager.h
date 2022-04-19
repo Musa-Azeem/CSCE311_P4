@@ -1,10 +1,12 @@
+/*
+Written by Musa Azeem
+*/
 #ifndef SHARED_FILE_MANAGER_H
 #define SHARED_FILE_MANAGER_H
 
 #include <string>
 #include <sys/un.h>
 #include <semaphore.h>
-#include <tuple>
 
 #define SOCKET_BUFFER_SIZE 1024
 #define INV "_INVALID_FILE_"

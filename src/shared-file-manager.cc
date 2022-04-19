@@ -1,20 +1,14 @@
 #include "../inc/shared-file-manager.h"
-
+#include <iostream>
 #include <sys/socket.h>
-#include <sys/un.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
-#include <semaphore.h>
-#include <cstring>
 #include <string>
-#include <iostream>
 #include <fcntl.h>
-
 
 SharedFileManager::SharedFileManager(const std::string sock_name, 
                                      const std::string sem_name)
     : kSrvBarrierName(sem_name) {
-    // socket_path_ = std::string(sock_name);
     sock_addr_ = {};
     sock_addr_.sun_family = AF_UNIX;
     strncpy(sock_addr_.sun_path + 1, 

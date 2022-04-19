@@ -18,7 +18,6 @@ class TextClient: SharedFileManager{
         static void *threaded_to_upper(void *thread_args);
         int file_to_upper();
         int connect_socket();
-        sem_t thread_sem;
 };
 
 #endif

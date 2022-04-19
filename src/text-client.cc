@@ -1,16 +1,14 @@
 #include "../inc/text-client.h"
 #include "../inc/thread-args.h"
+#include <iostream>
 #include <string>
 #include <semaphore.h>
-#include <iostream>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <sys/mman.h>
 #include <fcntl.h>
 #include <pthread.h>
 #include <vector>
-#include <stdio.h>
-#include <ctype.h>
 
 TextClient::TextClient(const std::string sock_name,
                        const std::string sem_name, 
@@ -68,9 +66,6 @@ int TextClient::runClient(){
 }// runClient
 
 int TextClient::file_to_upper(){
-    sem_destroy(&thread_sem);
-    sem_init(&thread_sem, 0, 1);
-
     std::vector<pthread_t> threads(N_THREADS);
     std::vector<ThreadArgs> args(N_THREADS);
     off_t start_idx;

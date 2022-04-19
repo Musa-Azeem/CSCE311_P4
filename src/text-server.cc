@@ -1,12 +1,11 @@
 #include "../inc/text-server.h"
+#include <iostream>
 #include <string.h>
 #include <semaphore.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <fcntl.h>
-#include <iostream>
-#include <cerrno>
 #include <unistd.h>
 
 TextServer::TextServer(const std::string sock_name, 
