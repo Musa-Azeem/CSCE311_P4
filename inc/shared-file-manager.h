@@ -1,5 +1,6 @@
 /*
 Written by Musa Azeem
+This file defines the SharedFileManager header
 */
 #ifndef SHARED_FILE_MANAGER_H
 #define SHARED_FILE_MANAGER_H

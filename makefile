@@ -2,8 +2,6 @@
 cc := g++
 
 # source code
-cli_src := main.cc src/text-client.cc src/shared-file-manager.cc
-srv_src := main.cc src/text-server.cc src/shared-file-manager.cc
 src := main.cc src/text-server.cc src/text-server.cc src/text-client.cc src/shared-file-manager.cc
 
 # final executables

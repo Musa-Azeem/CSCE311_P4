@@ -1,3 +1,0 @@
-Do we have to use shm_open ?
-what is the server doing if the client does same thing?
-does client create shared memory?

@@ -4,8 +4,8 @@
 #include "inc/text-server.h"
 #include "inc/ipc-names.h"
 
-#define SERVER_EXE "./text-server"
-#define CLIENT_EXE "./text-client"
+#define SRV_EXE "./text-server"
+#define CLI_EXE "./text-client"
 
 namespace main_srv{
     int main(int argc, char **argv){
@@ -33,8 +33,8 @@ namespace main_cli{
 }
 
 int main(int argc, char **argv){
-    if(strcmp(argv[0], SERVER_EXE) == 0)
+    if(strcmp(argv[0], SRV_EXE) == 0)
         return main_srv::main(argc, argv);
-    if(strcmp(argv[0], CLIENT_EXE) == 0)
+    if(strcmp(argv[0], CLI_EXE) == 0)
         return main_cli::main(argc, argv);
 }
