@@ -9,9 +9,6 @@
 #include <cerrno>
 #include <unistd.h>
 
-using std::cout;
-using std::endl;
-
 TextServer::TextServer(const std::string sock_name, 
                        const std::string sem_name)
     : SharedFileManager(sock_name, sem_name) {}
@@ -24,27 +21,10 @@ int TextServer::runServer(){
     std::cout << "SERVER STARTED" << std::endl;
 
     // Create semaphore
-    cli_barrier = setup_named_sem(kCliBarrierName, O_CREAT | O_EXCL);
-    if(cli_barrier == SEM_FAILED)
-        handle_error("Creating Client Semaphore");
     srv_barrier = setup_named_sem(kSrvBarrierName, O_CREAT | O_EXCL);
-    if(srv_barrier == SEM_FAILED)
-        handle_error("Creating Server Semaphore");
 
     // Create and Open Unix Domain Socket to get path
-    sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
-    if(sock_fd < 0)
-        handle_error("Opening socket");
-    success = bind(sock_fd, 
-                       reinterpret_cast<const sockaddr*>(&sock_addr_),
-                       sizeof(sock_addr_));
-    if(success < 0){
-        handle_error("Binding Socket");
-    }
-
-    // Listen for clients to write to socket
-    if( listen(sock_fd, 1) < 0)
-        handle_error("Listening for client");
+    sock_fd = start_socket();
 
     // Loop waiting for clients
     while(true){
@@ -90,4 +70,32 @@ int TextServer::runServer(){
         std::clog << "\tFILE CLOSED" << std::endl;
 
     }   // Step 3: Loop again waiting for clients
+}
+
+int TextServer::start_socket(){
+    int ret_fd;
+    int success;
+    ret_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    if(ret_fd < 0)
+        handle_error("Opening Socket");
+    success = bind(ret_fd, 
+                   reinterpret_cast<const sockaddr*>(&sock_addr_),
+                   sizeof(sock_addr_));
+    if(success < 0)
+        handle_error("Binding Socket");
+    if ( listen(ret_fd, 1) < 0 )
+        handle_error("Listening for Client");
+    return ret_fd;
+}
+
+sem_t *TextServer::setup_named_sem(const std::string sem_name, 
+                                          const int flags){
+    sem_unlink(&sem_name[0]);
+    sem_t *ret = sem_open(&sem_name[0],
+                          flags,
+                          S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP,
+                          0);
+    if(ret == SEM_FAILED)
+        handle_error("Creating Semaphore");
+    return ret;
 }

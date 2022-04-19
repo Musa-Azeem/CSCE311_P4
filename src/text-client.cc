@@ -22,21 +22,20 @@ int TextClient::runClient(){
     std::string check_inv;
 
     // Open Semaphore
-    cli_barrier = sem_open(&kCliBarrierName[0], 0);
-    if(cli_barrier == SEM_FAILED)
-        return handle_error("Opening semaphore");
     srv_barrier = sem_open(&kSrvBarrierName[0], 0);
     if(srv_barrier == SEM_FAILED)
         return handle_error("Opening Server semaphore");
+
     // Open Socket
-    sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
-    if(sock_fd < 0)
-        return handle_error("Opening Socket");
-    success = connect(sock_fd,
-                      reinterpret_cast<const sockaddr*>(&sock_addr_),
-                      sizeof(sock_addr_));
-    if(success < 0)
-        return handle_error("Connecting to socket");
+    sock_fd = connect_socket();
+    // sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    // if(sock_fd < 0)
+    //     return handle_error("Opening Socket");
+    // success = connect(sock_fd,
+    //                   reinterpret_cast<const sockaddr*>(&sock_addr_),
+    //                   sizeof(sock_addr_));
+    // if(success < 0)
+    //     return handle_error("Connecting to socket");
 
     // Step 1: Pass filename to server using the socket
     // Unblock server by writing
@@ -49,7 +48,7 @@ int TextClient::runClient(){
         return handle_error("Reading from Server");
     check_inv = buffer;
     if(check_inv.find(INV) != std::string::npos){
-        std::cerr << "INVALID FILE" << std::endl;
+        std::cerr << INV_MSG << std::endl;
         return -1;
     }
 
@@ -59,9 +58,8 @@ int TextClient::runClient(){
         handle_error("Opening File");
 
     // create and run threads
-    if (file_to_upper() < 0){
+    if (file_to_upper() < 0)
         handle_error("Running threads");
-    }
 
     // Unmap
     if (munmap(file_addr, file_size) < 0)
@@ -114,4 +112,18 @@ void *TextClient::threaded_to_upper(void *thread_args){
         // Use toupper to convert each character in file to uppercase
         args.cli->file_addr[i] = toupper(args.cli->file_addr[i]);
     return nullptr;
+}
+
+int TextClient::connect_socket(){
+    int ret_fd;
+    int success;
+    ret_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    if(ret_fd < 0)
+        handle_error("Opening Socket");
+    success = connect(ret_fd,
+                      reinterpret_cast<const sockaddr*>(&sock_addr_),
+                      sizeof(sock_addr_));
+    if(success < 0)
+        return handle_error("Connecting to socket");
+    return ret_fd;
 }

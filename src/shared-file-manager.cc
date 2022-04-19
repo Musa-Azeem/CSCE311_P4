@@ -13,7 +13,7 @@
 
 SharedFileManager::SharedFileManager(const std::string sock_name, 
                                      const std::string sem_name)
-    : kSrvBarrierName(sem_name+"_srv"), kCliBarrierName(sem_name+"_cli") {
+    : kSrvBarrierName(sem_name+"_srv") {
     // socket_path_ = std::string(sock_name);
     sock_addr_ = {};
     sock_addr_.sun_family = AF_UNIX;
@@ -26,15 +26,6 @@ int SharedFileManager::handle_error(std::string msg){
     std::cerr << "Source: " << msg << std::endl;
     std::cerr << "\t" << strerror(errno) << std::endl;
     exit(errno);
-}
-
-sem_t *SharedFileManager::setup_named_sem(const std::string sem_name, 
-                                          const int flags){
-    sem_unlink(&sem_name[0]);
-    return sem_open(&sem_name[0],
-                    flags,
-                    S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP,
-                    0);
 }
 
 int SharedFileManager::open_and_map_file(

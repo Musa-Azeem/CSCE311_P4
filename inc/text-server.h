@@ -11,6 +11,8 @@ class TextServer: SharedFileManager{
         int runServer();
     private:
         std::string file_path;
+        int start_socket();
+        sem_t *setup_named_sem(const std::string sem_name, const int flags);
 };
 
 #endif

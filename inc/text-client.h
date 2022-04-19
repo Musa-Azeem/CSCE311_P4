@@ -5,6 +5,7 @@
 #include <string>
 
 #define N_THREADS 4
+#define INV_MSG "INVALID FILE"
 
 class TextClient: SharedFileManager{
     public:
@@ -16,7 +17,7 @@ class TextClient: SharedFileManager{
         const std::string kFilePath;
         static void *threaded_to_upper(void *thread_args);
         int file_to_upper();
-
+        int connect_socket();
         sem_t thread_sem;
 };
 
