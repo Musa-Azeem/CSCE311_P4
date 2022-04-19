@@ -43,7 +43,7 @@ int TextServer::runServer(){
         std::clog << "CLIENT REQUEST RECEIVED" << std::endl;
 
         // Step 2.b: Open file and map to shared memory
-        std::clog << "\tOpening: " << file_path << std::endl;
+        std::clog << "\tOPENING: " << file_path << std::endl;
 
         if( open_and_map_file(file_path) < 0){
             // Indicate to client that file open failed (unblock)
@@ -70,7 +70,7 @@ int TextServer::runServer(){
         std::clog << "\tFILE CLOSED" << std::endl;
 
     }   // Step 3: Loop again waiting for clients
-}
+} // runServer
 
 int TextServer::start_socket(){
     int ret_fd;

@@ -28,24 +28,17 @@ int TextClient::runClient(){
 
     // Open Socket
     sock_fd = connect_socket();
-    // sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
-    // if(sock_fd < 0)
-    //     return handle_error("Opening Socket");
-    // success = connect(sock_fd,
-    //                   reinterpret_cast<const sockaddr*>(&sock_addr_),
-    //                   sizeof(sock_addr_));
-    // if(success < 0)
-    //     return handle_error("Connecting to socket");
 
-    // Step 1: Pass filename to server using the socket
+    // Step 1: Pass filename to server using a socket
     // Unblock server by writing
     if( write(sock_fd, &kFilePath[0], kFilePath.size()+1) < 0 )
         return handle_error("Writing to socket");
     
-    // Step 3: Check if sever was unable to open file
-    // Wait for server to write to socket and read to check if file invalid
+    // Wait for server to write to socket
     if( read(sock_fd, buffer, SOCKET_BUFFER_SIZE) < 0 )
         return handle_error("Reading from Server");
+    
+    // Step 3: Check if sever was unable to open file
     check_inv = buffer;
     if(check_inv.find(INV) != std::string::npos){
         std::cerr << INV_MSG << std::endl;
@@ -58,8 +51,7 @@ int TextClient::runClient(){
         handle_error("Opening File");
 
     // create and run threads
-    if (file_to_upper() < 0)
-        handle_error("Running threads");
+    file_to_upper();
 
     // Unmap
     if (munmap(file_addr, file_size) < 0)
@@ -73,7 +65,7 @@ int TextClient::runClient(){
 
     // Step 4: Return 1 to prompt main to return 0
     return 1;
-}
+}// runClient
 
 int TextClient::file_to_upper(){
     sem_destroy(&thread_sem);
@@ -103,8 +95,7 @@ int TextClient::file_to_upper(){
             handle_error("Thread joining");
     }
     return 1;
-
-}
+}//file_to_upper
 
 void *TextClient::threaded_to_upper(void *thread_args){
     ThreadArgs args = *static_cast<ThreadArgs*>(thread_args);

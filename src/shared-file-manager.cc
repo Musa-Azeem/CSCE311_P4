@@ -13,7 +13,7 @@
 
 SharedFileManager::SharedFileManager(const std::string sock_name, 
                                      const std::string sem_name)
-    : kSrvBarrierName(sem_name+"_srv") {
+    : kSrvBarrierName(sem_name) {
     // socket_path_ = std::string(sock_name);
     sock_addr_ = {};
     sock_addr_.sun_family = AF_UNIX;
@@ -23,7 +23,7 @@ SharedFileManager::SharedFileManager(const std::string sock_name,
 }
 
 int SharedFileManager::handle_error(std::string msg){
-    std::cerr << "Source: " << msg << std::endl;
+    std::cerr << "Error Source: " << msg << std::endl;
     std::cerr << "\t" << strerror(errno) << std::endl;
     exit(errno);
 }
