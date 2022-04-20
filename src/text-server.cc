@@ -1,3 +1,12 @@
+/*
+Written by Musa Azeem
+This file defines the functions of the TextServer class
+Functions:
+    Constructor         calls parent constructor for sock_name and sem_name
+    runServer           runs the server - recieves a file name from client and opens file
+    start_socket        creates and binds to a Unix Domain Socket, and starts listening for clients
+    setup_named_sem     creates a named semaphore
+*/
 #include "../inc/text-server.h"
 #include <iostream>
 #include <string.h>

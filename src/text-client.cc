@@ -1,3 +1,13 @@
+/*
+Written by Musa Azeem
+This file defines the functions for the TextClient Class
+Functions:
+    Constructor         initializes kFilePath and calls parent constructor for sock_name and sem_name
+    runClient           runs the client - passes server a filename, waits for server, and then processes file
+    file_to_upper       prepares and calls threads to each process a portion of the file
+    threaded_to_upper   function run by threads to convert a section of a file to uppercase
+    connect_socket      opens and connects client to an existing Unix Domain Socket
+*/
 #include "../inc/text-client.h"
 #include "../inc/thread-args.h"
 #include <iostream>

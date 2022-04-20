@@ -1,6 +1,14 @@
 /*
 Written by Musa Azeem
-This file defines the SharedFileManager header
+This file defines the SharedFileManager class
+Class Variables:
+    sock_addr:          Unix Domain Socket struct
+    sock_fd:            socket file descriptor
+    kSrvBarrierName:    Name of Server barrier semaphore
+    srv_barrier:        Semaphore for server barrier
+    file_addr:          char array that file will be mapped to
+    fd:                 file descriptor for file
+    file_size:          file size
 */
 #ifndef SHARED_FILE_MANAGER_H
 #define SHARED_FILE_MANAGER_H

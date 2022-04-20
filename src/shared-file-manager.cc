@@ -1,3 +1,10 @@
+/*
+This file defines the functions for the SharedFileManager class
+Functions:
+    constructor:        initializes kSrvBarrierName and sock_addr_
+    handle_error:       prints a message and errno when there is an error
+    open_and_map_file:  Opens and maps a file to file_addr (char array)
+*/
 #include "../inc/shared-file-manager.h"
 #include <iostream>
 #include <sys/socket.h>

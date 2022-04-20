@@ -1,3 +1,9 @@
+/*
+Written by Musa Azeem
+This file defines the TextServer class, which inherits form SharedFileManager
+Class Variables:
+    file_path       file name and path to open
+*/
 #ifndef TEXT_SERVER_H
 #define TEXT_SERVER_H
 

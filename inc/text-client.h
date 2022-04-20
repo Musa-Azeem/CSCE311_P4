@@ -1,3 +1,9 @@
+/*
+Written by Musa Azeem
+This file defines the TextClient class, which inherites the SharedFileManager class
+Class Variables:
+    kFilePath       file name and path to process
+*/
 #ifndef TEXT_CLIENT_H
 #define TEXT_CLIENT_H
 
