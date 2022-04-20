@@ -22,5 +22,6 @@ $(cli_exe): $(src)
 $(srv_exe): $(src)
 	$(compile.cc)
 
+.PHONY: clean
 clean:
-	rm -r $(cli_exe) $(srv_exe)
+	rm -rf $(cli_exe) $(srv_exe)

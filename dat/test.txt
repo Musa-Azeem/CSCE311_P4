@@ -1,4 +1,4 @@
-del
-dellvhe
-hello
-vhklve
+DEL
+DELLVHE
+HELLO
+VHKLVE
