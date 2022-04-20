@@ -57,11 +57,11 @@ The `src` folder contains all source codes
 - The main method is defined in the file `main.cc`
 - It runs either the server or the client, based on the name of the executable
 
-### Server Main Method
+#### Server Main Method
 - This main method creates and runs a Shared File server using the `TextServer` class
 - It is defined in the file `src/main.cc` in the `main_srv` namespace
 
-### Client Main Method
+#### Client Main Method
 - This main method creates and runs a Shared Memory client using the `TextClient` class
 - It is given a file path as a command line argument
 - It is defined in the file `src/main.cc` in the `main_cli` namespace
