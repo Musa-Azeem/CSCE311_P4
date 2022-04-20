@@ -1,3 +1,11 @@
+/*
+Written by Musa Azeem
+This file defines the main methods for the text-server and text-client
+Functions:
+    main_srv    the main method in this namespace runs the server
+    main_cli    the main method in this namespace runs the client
+    main        the entrypoint - runs main_srv or main_cli based on name of executable
+*/
 #include <iostream>
 #include <string.h>
 #include "inc/text-client.h"
